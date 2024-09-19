@@ -10,7 +10,7 @@ var app = builder.Build();
 app.MapGet("/", () => "Hello Copilot!");
 
 // make sure you change the App Name below
-string yourGitHubAppName = " poc-copilot-extension";
+string yourGitHubAppName = "poc-copilot-extension";
 string githubCopilotCompletionsUrl = 
     "https://api.githubcopilot.com/chat/completions";
 
@@ -19,6 +19,7 @@ app.MapPost("/agent", async (
     [FromHeader(Name = "X-GitHub-Token")] string githubToken, 
     [FromBody] Request userRequest) =>
 {
+    Console.WriteLine("message request received.");
     var octokitClient = 
         new GitHubClient(
             new Octokit.ProductHeaderValue(yourGitHubAppName))
@@ -56,5 +57,9 @@ app.MapPost("/agent", async (
 });
 
 //https://reimagined-doodle-rrj7p7vqj5fx9pg-5153.app.github.dev/
+app.MapGet("/callback", () => "You may close this tab and " + 
+    "return to GitHub.com (where you should refresh the page " +
+    "and start a fresh chat). If you're using VS Code or " +
+    "Visual Studio, return there.");
 
 app.Run();
